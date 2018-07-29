@@ -1,86 +1,56 @@
-//
-// Created by daniel on 9/9/17.
-//
-
 #ifndef RAYTRACER_ROTATE_H
 #define RAYTRACER_ROTATE_H
 
 #include <Eigen/Core>
-#include "src/raytracer/math/utils.h"
+
+#include "raytracer/math/concepts/direction.h"
+#include "raytracer/math/utils.h"
 #include "transform.h"
 
 namespace raytracer {
 
-class Rotation : public Transform {
+template <typename T>
+class Rotation : public Transform<T> {
  public:
-  Rotation() : axis(Vector3d()), angle(0.0) {}
-  Rotation(const Vector3d axis, const double angle) : axis(axis), angle(angle) {}
-  Rotation(const double x, const double y, const double z, const double theta) {
-    axis = Eigen::Vector3d(x, y, z);
-    angle = theta;
+  Rotation() : Transform<T>(), axis_(Direction<T>()), angle_(0.0) {}
+  Rotation(Transform::SPtr prev) : Transform<T>(prev), axis_(Direction<T>()), angle_(0.0) {}
+  Rotation(const Direction<T>& axis, T angle) : Transform<T>(), axis_(axis), angle_(angle) {axis_.Normalized();}
+  Rotation(Transform::SPtr prev, const Direction<T>& axis, T angle) : Transform<T>(prev), axis_(axis), angle_(angle) {axis_.Normalized();}
+
+  const Direction<T>& GetAxis() const {
+    return this->axis_;
+  }
+  void SetAxis(const Direction<T>& axis) {
+    this->axis_ = axis;
+    this->cached = false;
   }
 
-  const double GetAngle() {
-    return angle;
+  const T& GetAngle() const {
+    return this->angle_;
   }
-  void SetAngle(double theta) {
-    angle = theta;
-    cached = false;
-  }
-
-  const Eigen::Vector3d GetAxis() {
-    return axis;
-  }
-  void SetAxis(Eigen::Vector3d axis) {
-    this->axis = axis;
-    cached = false;
+  void SetAngle(T angle) {
+    this->angle_ = angle;
+    this->cached = false;
   }
 
-  void LocalTransformVect(Eigen::Vector3d& vect) {
-    vect *= cos(angle);
-    vect += axis.cross(vect) * sin(angle);
-    vect += axis * (axis.dot(vect)) * (1 - cos(angle));
+  void SetAxisAngle(const Direction& axis, T angle) {
+    this->axis_ = axis;
+    this->angle_ = angle;
+    this->cached = false;
   }
-  void LocalTransformMat(Eigen::Matrix4d& mat) {
-    mat = AsMatrix() * mat;
-  }
-
-  void GlobalTransformVect(Eigen::Vector3d& vect) {
-    if (prev) {
-      prev->GlobalTransformVect(vect);
-    }
-    LocalTransformMat(vect);
-  }
-  void GlobalTransformMat(Eigen::Matrix4d& mat) {
-    if (prev) {
-      prev->GlobalTransformMat(mat);
-    }
-    LocalTransformMat(mat);
-  }
-
-  void GlobalRotationVect(Eigen::Vector3d& vect) {
-    if (prev) {
-      prev->GlobalRotationVect(vect);
-    }
-    LocalTransformMat(vect);
-  }
-
- protected:
-  // ASSUMES THE AXIS IS NORMALIZED!!!
-  Eigen::Vector3d axis;
-  double angle;
-  bool cached = false;
-  Eigen::Matrix4d local_mat_cache;
 
   Eigen::Matrix4d AsMatrix() {
     if (!cached) {
-      local_mat_cache = Eigen::Matrix4d::Identity();
-      local_mat_cache += sin(angle) * SkewSymmetric(axis);
-      local_mat_cache += (1.0 - cos(angle)) * SkewSymmetric(axis) * SkewSymmetric(axis);
-      cached = true;
+      local_mat_cache.block<3, 3>(0, 0) = Eigen::AngleAxis<T>(angle_, axis_.direction_).toRotationMatrix();
     }
     return local_mat_cache;
   }
+
+ protected:
+  Direction<T> axis_;
+  T angle_;
+  bool cached = false;
+  Eigen::Matrix<T, 4, 4> local_mat_cache = Eigen::Matrix<T, 4, 4>::Identity();
 };
 
 }

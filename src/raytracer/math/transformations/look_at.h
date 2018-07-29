@@ -1,15 +1,12 @@
-//
-// Created by daniel on 9/10/17.
-//
-
 #ifndef RAYTRACER_LOOKAT_H
 #define RAYTRACER_LOOKAT_H
 
 #include <Eigen/Core>
 
-#include "raytracer/scene_objects/abstract_object.h"
+#include "raytracer/scene_objects/void_object.h"
 #include "raytracer/scene_objects/void_object.h"
 
+#include "raytracer/math/concepts/point.h"
 #include "raytracer/math/utils.h"
 #include "transform.h"
 

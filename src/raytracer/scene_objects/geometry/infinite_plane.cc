@@ -9,13 +9,13 @@
 namespace raytracer {
 
 //InfinitePlane::InfinitePlane(const AbstractShader& shader, const Vector3d &point, const Vector3d &normal) :
-//    AbstractGeometry(shader), center(point), normal(normal) {}
+//    AbstractGeometry(shader), center_(point), normal(normal) {}
 //
 //bool InfinitePlane::hit(const Ray &ray, ShadingData &dat) const {
-//  Vector3d g_center = center;
+//  Vector3d g_center = center_;
 //  Vector3d g_normal = normal;
-//  tform->GlobalTransformVect(g_center);
-//  tform->GlobalRotationVect(g_normal);
+//  translation_->GlobalTransformVect(g_center);
+//  translation_->GlobalRotationVect(g_normal);
 //  double denom = g_normal.dot(ray.getDirection());
 //  if (!two_sided && denom <= 0.0) {
 //    dat.hit = false;

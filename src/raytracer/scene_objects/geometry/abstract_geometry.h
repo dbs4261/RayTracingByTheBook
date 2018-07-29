@@ -5,7 +5,7 @@
 #ifndef RAYTRACER_ABSTRACT_GEOMETRY_H
 #define RAYTRACER_ABSTRACT_GEOMETRY_H
 
-#include "raytracer/math/ray.h"
+#include "math/concepts/ray.h"
 #include "raytracer/shaders/flat_shader.h"
 
 #include "raytracer/scene_objects/void_object.h"

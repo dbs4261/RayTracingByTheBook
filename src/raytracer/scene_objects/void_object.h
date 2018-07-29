@@ -1,22 +1,41 @@
-//
-// Created by daniel on 9/9/17.
-//
-
-#ifndef RAYTRACER_VOIDOBJECT_H
-#define RAYTRACER_VOIDOBJECT_H
+#ifndef RAYTRACER_ABSTRACTOBJECT_H
+#define RAYTRACER_ABSTRACTOBJECT_H
 
 #include <Eigen/Core>
+#include <memory>
+#include <unordered_set>
 
-#include "abstract_object.h"
+#include "raytracer/math/transformations/transform.h"
 
 namespace raytracer {
 
-class VoidObject : public AbstractObject {
+template <typename T>
+class AbstractObject {
  public:
-  VoidObject() : AbstractObject(Eigen::Vector3d(0.0, 0.0, 0.0)) {}
-  VoidObject(const Eigen::Vector3d& center) : AbstractObject(center) {}
+  AbstractObject() : center_(), tform_() {}
+  explicit AbstractObject(const Point<T>& center) : center_(center), tform_() {}
+  explicit AbstractObject(Transform<T>::SPtr tform) : center_(), tform_(std::move(tform)) {}
+  AbstractObject(const Point<T>& center, Transform<T>::SPtr tform) : center_(center), tform_(tform) {}
+
+  void PushTransform(std::shared_ptr<Transform<T>> next) {
+    next->prev_ = this->tform_;
+    this->tform_ = next;
+  }
+
+  std::shared_ptr<Transform> PopTransform() {
+    std::shared_ptr<Transform> out = this->tform_;
+    this->tform_ = out->prev_;
+    return out;
+  }
+
+  Point<T> GetGlobalCenter() const {
+    return this->tform_->TransformPoint(this->center_);
+  }
+
+  Point<T> center_;
+  Transform<T>::SPtr tform_;
 };
 
 }
 
-#endif //RAYTRACER_VOIDOBJECT_H
+#endif //RAYTRACER_ABSTRACTOBJECT_H

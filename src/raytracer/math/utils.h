@@ -10,7 +10,8 @@
 namespace raytracer {
 
 // Overwrites a matrix with a skew symmetric matrix
-void SkewSymmetric(const Eigen::Vector3d& vect, Eigen::Matrix4d& mat) {
+template <int D, typename T>
+void SkewSymmetric(const Eigen::Matrix<T, D, 1>& vect, Eigen::Matrix<T, D + 1, D + 1>& mat) {
   mat(0,0) = 0.0;
   mat(0,1) = -vect(2);
   mat(0,2) = vect(1);

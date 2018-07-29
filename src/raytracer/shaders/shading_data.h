@@ -8,20 +8,20 @@
 #include <Eigen/Core>
 
 #include "abstract_shader.h"
-#include "raytracer/math/ray.h"
+#include "math/concepts/ray.h"
 
 namespace raytracer {
 
 class ShadingData {
- public:
-  bool hit;
-  int iter;
-  const Ray* ray;
-  double depth;
-  Eigen::Vector3d hit_point;
-  Eigen::Vector3d normal;
-  Eigen::Vector2d texture;
-  AbstractShader* shader;
+// public:
+//  bool hit;
+//  int iter;
+//  const Ray* ray;
+//  double depth;
+//  Eigen::Vector3d hit_point;
+//  Eigen::Vector3d normal;
+//  Eigen::Vector2d texture;
+//  AbstractShader* shader;
 };
 
 }

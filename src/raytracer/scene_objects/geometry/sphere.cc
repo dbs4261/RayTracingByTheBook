@@ -9,14 +9,14 @@
 //
 //namespace raytracer {
 //
-//Sphere::Sphere(const Vector3d& center, const double& radius) :
-//    AbstractGeometry(center), radius(radius) {}
-//Sphere::Sphere(const Vector3d& center, const double& radius, const AbstractShader& shader) :
-//    AbstractObject(center), AbstractGeometry(shader), radius(radius) {}
+//Sphere::Sphere(const Vector3d& center_, const double& radius) :
+//    AbstractGeometry(center_), radius(radius) {}
+//Sphere::Sphere(const Vector3d& center_, const double& radius, const AbstractShader& shader) :
+//    AbstractObject(center_), AbstractGeometry(shader), radius(radius) {}
 //
 //bool sphere::hit(const Ray &ray, ShadingData &dat) const {
-//  Eigen::Vector3d g_center = center;
-//  tform->GlobalTransformVect(g_center);
+//  Eigen::Vector3d g_center = center_;
+//  translation_->GlobalTransformVect(g_center);
 //  double a = ray.getDirection().dot(ray.getDirection());
 //  double b = 2 * (ray.getOrigin() - g_center).dot(ray.getDirection());
 //  double c = (ray.getOrigin() - g_center).dot(ray.getOrigin() - g_center) - radius * radius;

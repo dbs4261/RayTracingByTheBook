@@ -1,7 +1,3 @@
-//
-// Created by daniel on 9/9/17.
-//
-
 #ifndef RAYTRACER_TRANSFORM_H
 #define RAYTRACER_TRANSFORM_H
 
@@ -11,32 +7,49 @@
 
 namespace raytracer {
 
+template <typename T>
 class Transform {
  public:
-  std::shared_ptr<Transform> GetPrevious() {return prev;}
-  void SetPrevious(std::shared_ptr<Transform> tform) {prev = tform;}
+  using SPtr = std::shared_ptr<Transform<T>>;
 
-  virtual void LocalTransformVect(Eigen::Vector3d& vect) = 0;
-  virtual void LocalTransformMat(Eigen::Matrix4d& mat) = 0;
+  Transform() : prev_(nullptr) {}
+  explicit Transform(Transform::SPtr prev) : prev_(std::move(prev)) {}
 
-  virtual void GlobalTransformVect(Eigen::Vector3d& vect) = 0;
-  virtual void GlobalTransformMat(Eigen::Matrix4d& mat) = 0;
+  // Makes a transformation matrix.
+  virtual void AsMatrix(Eigen::Matrix<T, 4, 4>& mat) const = 0;
 
-  Eigen::Matrix4d LocalTransformMat() {
-    return AsMatrix();
+  virtual void LocalTransformMat(Eigen::Matrix<T, 4, 4>& mat) const {
+    AsMatrix(mat);
   }
-  Eigen::Matrix4d GlobalTransformMat() {
-    Eigen::Matrix4d out = Eigen::Matrix4d::Identity();
+
+  virtual void GlobalTransformMat(Eigen::Matrix<T, 4, 4>& mat) const {
+    if (prev_.get() != nullptr) {
+      prev_->GlobalTransformMat(mat);
+    }
+    LocalTransformMat(mat);
+  }
+
+  Eigen::Matrix<T, 4, 4> LocalTransformMat() const {
+    Eigen::Matrix<T, 4, 4> out = Eigen::Matrix<T, 4, 4>::Identity();
+    LocalTransformMat(out);
+    return out;
+  }
+
+  Eigen::Matrix<T, 4, 4> GlobalTransformMat() const {
+    Eigen::Matrix<T, 4, 4> out = Eigen::Matrix<T, 4, 4>::Identity();
     GlobalTransformMat(out);
     return out;
   }
 
-  virtual void GlobalRotationVect(Eigen::Vector3d& vect) = 0;
+  Point<T> TransformPoint(const Point<T>& pt) const {
+    return Point<T>(GlobalTransformMat().template block<3, 4>(0, 0) * pt.point_);
+  }
 
- protected:
-  std::shared_ptr<Transform> prev = nullptr;
-  // Creates the transformation matrix from scratch
-  virtual Eigen::Matrix4d AsMatrix() = 0;
+  Direction<T> TransformDirection(const Direction<T>& dir) const {
+    return Direction<T>(GlobalTransformMat().template block<3, 4>(0, 0) * dir.direction_);
+  }
+
+  Transform::SPtr prev_;
 };
 
 }

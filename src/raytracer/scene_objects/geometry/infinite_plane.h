@@ -14,7 +14,7 @@ namespace raytracer {
 class InfinitePlane : public AbstractGeometry {
 // public:
 //  InfinitePlane() {};
-//  InfinitePlane(const AbstractShader& shader, const Eigen::Vector3d& center, const Eigen::Vector3d& normal);
+//  InfinitePlane(const AbstractShader& shader, const Eigen::Vector3d& center_, const Eigen::Vector3d& normal);
 //
 //  bool hit(const Ray& ray, ShadingData& dat) const;
 //

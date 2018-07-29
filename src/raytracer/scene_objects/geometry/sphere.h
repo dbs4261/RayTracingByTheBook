@@ -15,8 +15,8 @@
 //
 //class Sphere : public AbstractGeometry {
 // public:
-//  Sphere(const Vector3d& center, const double& radius);
-//  Sphere(const Vector3d& center, const double& radius, const AbstractShader& shader);
+//  Sphere(const Vector3d& center_, const double& radius);
+//  Sphere(const Vector3d& center_, const double& radius, const AbstractShader& shader);
 //  bool hit(const Ray& ray, ShadingData& dat) const;
 //
 // protected:
