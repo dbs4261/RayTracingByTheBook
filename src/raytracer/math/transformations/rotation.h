@@ -53,6 +53,11 @@ class Rotation : public Transform<T> {
   Eigen::Matrix<T, 4, 4> local_mat_cache = Eigen::Matrix<T, 4, 4>::Identity();
 };
 
+template <typename T, typename ... Args>
+Transform<T>::SPtr MakeRotation(Args&& ... args) {
+  return std::make_shared<Rotation<T>>(std::forward(args));
+};
+
 }
 
 #endif //RAYTRACER_ROTATE_H

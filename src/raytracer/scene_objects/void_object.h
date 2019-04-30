@@ -1,41 +1,45 @@
-#ifndef RAYTRACER_ABSTRACTOBJECT_H
-#define RAYTRACER_ABSTRACTOBJECT_H
+#ifndef RAYTRACER_VOID_OBJECT_H
+#define RAYTRACER_VOID_OBJECT_H
 
 #include <Eigen/Core>
 #include <memory>
 #include <unordered_set>
 
 #include "raytracer/math/transformations/transform.h"
+#include "raytracer/math/transformations/null_transform.h"
+
+#include "raytracer/scene_objects/void_object.h"
 
 namespace raytracer {
 
 template <typename T>
-class AbstractObject {
+class VoidObject {
  public:
-  AbstractObject() : center_(), tform_() {}
-  explicit AbstractObject(const Point<T>& center) : center_(center), tform_() {}
-  explicit AbstractObject(Transform<T>::SPtr tform) : center_(), tform_(std::move(tform)) {}
-  AbstractObject(const Point<T>& center, Transform<T>::SPtr tform) : center_(center), tform_(tform) {}
+  VoidObject() : tform_(MakeNullTransform<T>()) {}
+  explicit VoidObject(typename Transform<T>::SPtr tform) : tform_(std::move(tform)) {}
 
-  void PushTransform(std::shared_ptr<Transform<T>> next) {
+  void PushTransform(typename Transform<T>::SPtr next) {
     next->prev_ = this->tform_;
     this->tform_ = next;
   }
 
-  std::shared_ptr<Transform> PopTransform() {
-    std::shared_ptr<Transform> out = this->tform_;
+  typename Transform<T>::SPtr PopTransform() {
+    typename Transform<T>::SPtr out = this->tform_;
     this->tform_ = out->prev_;
     return out;
   }
 
-  Point<T> GetGlobalCenter() const {
-    return this->tform_->TransformPoint(this->center_);
+  typename Transform<T>::SPtr PeekTransform() {
+    return this->tform_;
   }
 
-  Point<T> center_;
-  Transform<T>::SPtr tform_;
+  Point<T> GetGlobalCenter() const {
+    return this->tform_->TransformPoint();
+  }
+
+  typename Transform<T>::SPtr tform_;
 };
 
 }
 
-#endif //RAYTRACER_ABSTRACTOBJECT_H
+#endif //RAYTRACER_VOID_OBJECT_H

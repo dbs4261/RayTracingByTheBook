@@ -1,9 +1,12 @@
 #ifndef RAYTRACER_TRANSFORM_H
 #define RAYTRACER_TRANSFORM_H
 
-
 #include <Eigen/Core>
+#include <Eigen/Geometry>
 #include <memory>
+
+#include "raytracer/math/concepts/point.h"
+#include "raytracer/math/concepts/direction.h"
 
 namespace raytracer {
 
@@ -41,12 +44,16 @@ class Transform {
     return out;
   }
 
+  Point<T> TransformPoint() const {
+    return Point<T>(this->GlobalTransformMat().template block<4, 1>(0, 4).hnormalized());
+  }
+
   Point<T> TransformPoint(const Point<T>& pt) const {
-    return Point<T>(GlobalTransformMat().template block<3, 4>(0, 0) * pt.point_);
+    return Point<T>((this->GlobalTransformMat() * pt.point_.homogeneous()).hnormalized());
   }
 
   Direction<T> TransformDirection(const Direction<T>& dir) const {
-    return Direction<T>(GlobalTransformMat().template block<3, 4>(0, 0) * dir.direction_);
+    return Direction<T>((this->GlobalTransformMat() * dir.direction_.homogeneous().eval()).hnormalized());
   }
 
   Transform::SPtr prev_;

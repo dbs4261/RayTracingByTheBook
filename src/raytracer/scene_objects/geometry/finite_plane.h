@@ -1,7 +1,3 @@
-//
-// Created by daniel on 9/6/17.
-//
-
 #ifndef RAYTRACER_FINITEPLANE_H
 #define RAYTRACER_FINITEPLANE_H
 
@@ -9,7 +5,8 @@
 
 namespace raytracer {
 
-class FinitePlane : public InfinitePlane {
+template <typename T>
+class FinitePlane : public InfinitePlane<T> {
 
 };
 

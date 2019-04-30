@@ -1,14 +1,13 @@
-//
-// Created by daniel on 9/10/17.
-//
-
 #ifndef RAYTRACER_ABSTRACTSHADER_H
 #define RAYTRACER_ABSTRACTSHADER_H
+
+#include <memory>
 
 namespace raytracer {
 
 class AbstractShader {
-
+ public:
+  using SPtr = std::shared_ptr<AbstractShader>;
 };
 
 }

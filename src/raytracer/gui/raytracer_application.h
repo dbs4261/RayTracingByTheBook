@@ -3,50 +3,58 @@
 
 #include <memory>
 
-#include <QtWidgets/QMainWindow>
+#include <QAction>
+#include <QLabel>
+#include <QMainWindow>
+#include <QPainter>
+#include <QScrollArea>
+#include <QScrollBar>
 
-#include "render_display.h"
+#include "raytracer/scene_objects/scene_graph.h"
+//#include "raytracer/scene_objects/cameras/abstract_camera.h"
 
 namespace raytracer {
 
 class RaytracerApplication : public QMainWindow {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
-//  RaytracerApplication();
-//  virtual ~RaytracerApplication() {};
-
- protected:
-//  void closeEvent(QCloseEvent *event) override;
+  RaytracerApplication(const SceneGraph<double>& scene_);
+  bool loadFile(const QString& fname);
 
  private slots:
-//  void open();
-//  void save();
-//  void about();
+  void open();
+  void saveAs();
+  void zoomIn();
+  void zoomOut();
+  void normalSize();
+  void fitToWindow();
+  void about();
+  void renderCamera(QAction* action);
 
  private:
-//  void createActions();
-//  void createMenus();
-//  bool maybeSave();
-//  bool saveFile(const QByteArray &fileFormat);
+  void createActions();
+  void updateActions();
+  bool saveFile(const QString& fileName);
+  void setImage(const QImage& newImage);
+  void scaleImage(double factor);
+  void adjustScrollBar(QScrollBar* scrollBar, double factor);
 
-  QTabWidget* tabWidget;
-  QLabel* statusLabel;
+  const SceneGraph<double>& scene;
+//  QImage image;
+  QPixmap pixmap;
+  QPainter painter;
+  QLabel* imageLabel;
+  QScrollArea* scrollArea;
+  double scaleFactor = 1;
 
-  QMenu* saveAsMenu;
-  QMenu* fileMenu;
-  QMenu* optionMenu;
-  QMenu* helpMenu;
-
+//  QAction* renderAct;
   QAction* openAct;
-  QList<QAction*> saveAsActs;
-  QAction* exitAct;
-  QAction* penColorAct;
-  QAction* penWidthAct;
-  QAction* printAct;
-  QAction* clearScreenAct;
-  QAction* aboutAct;
-  QAction* aboutQtAct;
+  QAction* saveAsAct;
+  QAction* zoomInAct;
+  QAction* zoomOutAct;
+  QAction* normalSizeAct;
+  QAction* fitToWindowAct;
 };
 
 }

@@ -25,6 +25,11 @@ class Translation : public Transform<T> {
   Eigen::Matrix<T, 3, 1> translation_;
 };
 
+template <typename T, typename ... Args>
+Transform<T>::SPtr MakeTranslation(Args&& ... args) {
+  return std::make_shared<Translation<T>>(std::forward(args));
+};
+
 }
 
 #endif //RAYTRACER_TRANSLATION_H

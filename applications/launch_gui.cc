@@ -1,10 +1,10 @@
 #include <QApplication>
 
-#include "src/raytracer/gui/example/main_window.h"
+#include "raytracer/gui/raytracer_application.h"
 
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
-//  MainWindow window;
-//  window.show();
+  raytracer::RaytracerApplication window;
+  window.show();
   return app.exec();
 }

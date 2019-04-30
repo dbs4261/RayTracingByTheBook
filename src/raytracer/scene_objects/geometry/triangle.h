@@ -1,7 +1,3 @@
-//
-// Created by daniel on 9/6/17.
-//
-
 #ifndef RAYTRACER_TRIANGLE_H
 #define RAYTRACER_TRIANGLE_H
 
@@ -9,7 +5,8 @@
 
 namespace raytracer {
 
-class Triangle : public AbstractGeometry {
+template <typename T>
+class Triangle : public AbstractGeometry<T> {
 
 };
 

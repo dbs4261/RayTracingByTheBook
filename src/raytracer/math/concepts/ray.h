@@ -35,6 +35,10 @@ class Ray {
     return Ray<D>(this->origin_, this->direction_);
   }
 
+  Point<T> Project(T distance) const {
+    return Point<T>(origin_ + (direction_ * distance));
+  }
+
   Point<T> origin_;
   Direction<T> direction_;
 };
