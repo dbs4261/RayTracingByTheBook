@@ -27,3 +27,15 @@ target_link_libraries(LaunchGui
     ${GFLAGS_LIBRARIES}
     ${GLOG_LIBRARIES}
 )
+
+add_executable(ImguiSfmlExample applications/imgui_sfml_example.cc)
+target_link_libraries(ImguiSfmlExample
+  PRIVATE
+    imgui
+    ${GFLAGS_LIBRARIES}
+    ${GLOG_LIBRARIES}
+)
+target_include_directories(ImguiSfmlExample
+  PRIVATE
+    libraries/imgui
+)
