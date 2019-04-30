@@ -1,10 +1,11 @@
-#include <QApplication>
+#include <gflags/gflags.h>
+#include <glog/logging.h>
 
-#include "raytracer/gui/raytracer_application.h"
+DEFINE_string(temp, "", "Help");
 
 int main(int argc, char *argv[]) {
-  QApplication app(argc, argv);
-  raytracer::RaytracerApplication window;
-  window.show();
-  return app.exec();
+  GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
+
+  LOG(INFO) << FLAGS_temp;
+  return EXIT_SUCCESS;
 }
