@@ -20,22 +20,5 @@ endif()
 
 option(BUILD_SHARED_LIBS OFF)
 
-add_executable(LaunchGui applications/launch_gui.cc)
-target_link_libraries(LaunchGui
-  PRIVATE
-    imgui
-    ${GFLAGS_LIBRARIES}
-    ${GLOG_LIBRARIES}
-)
-
-add_executable(ImguiSfmlExample applications/imgui_sfml_example.cc)
-target_link_libraries(ImguiSfmlExample
-  PRIVATE
-    imgui
-    ${GFLAGS_LIBRARIES}
-    ${GLOG_LIBRARIES}
-)
-target_include_directories(ImguiSfmlExample
-  PRIVATE
-    libraries/imgui
-)
+add_subdirectory(src/raytracer)
+add_subdirectory(applications)
