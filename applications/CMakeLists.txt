@@ -9,6 +9,11 @@ target_include_directories(LaunchGui
   PRIVATE
     ../src/
 )
+target_compile_options(raytracer
+  PRIVATE
+  $<$<CONFIG:Debug>:-O3>
+  $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z>
+  )
 
 add_executable(ImguiSfmlExample imgui_sfml_example.cc)
 target_link_libraries(ImguiSfmlExample
@@ -21,3 +26,8 @@ target_include_directories(ImguiSfmlExample
   PRIVATE
     ../libraries/imgui
 )
+target_compile_options(raytracer
+  PRIVATE
+  $<$<CONFIG:Debug>:-O3>
+  $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z>
+  )

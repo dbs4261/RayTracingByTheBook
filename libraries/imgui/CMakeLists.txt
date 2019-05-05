@@ -1,7 +1,7 @@
 set(OpenGL_GL_PREFERENCE GLVND)
 
 find_package(OpenGL REQUIRED)
-if(OPENGL_LIBRARIES)
+if(OPENGL_FOUND)
   message("-- Found OpenGL")
 else()
   message("-- Did not find OpenGL")
