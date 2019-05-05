@@ -36,6 +36,14 @@ class Image {
     return this->size;
   }
 
+  inline size_t GetX() const {
+    return this->size.x;
+  }
+
+  inline size_t GetY() const {
+    return this->size.y;
+  }
+
   void SetSize(const Coordinate<size_t, 2>& new_size);
 
   std::vector<unsigned char> data;

@@ -1,4 +1,6 @@
+#include <chrono>
 #include <gflags/gflags.h>
+#include <iostream>
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -15,19 +17,20 @@ int main(int argc, char** argv) {
   GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
 
   ImGui::CreateContext();
-  sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Dan's Renderer");
+  sf::RenderWindow window(sf::VideoMode(640, 480), "Dan's Renderer");
   ImGui::SFML::Init(window);
 
   raytracer::DrawableImage img(480, 270);
-  std::fill(img.Get().data.begin(), img.Get().data.end(), 0);
+  std::fill(img.Get().data.begin(), img.Get().data.end(), 127);
 
-//  auto start = std::chrono::high_resolution_clock::now();
-  img.setScale(window.getSize().x / (float)img.Get().GetSize().x,
-               window.getSize().y / (float)img.Get().GetSize().y);
+  raytracer::ColorBars(img.Get());
+  raytracer::AddBorder(img.Get(), raytracer::RGBA{127, 127, 127, 127}, 1);
 
-  raytracer::ColorBars<raytracer::ChannelType::RGBA>(img.Get().data.data(), 480, 270);
+  img.setScale(window.getSize().x / (float)img.Get().GetX(), window.getSize().y / (float)img.Get().GetY());
+
+  auto start = std::chrono::high_resolution_clock::now();
   img.Update();
-//  std::cout << "Set up time: " << std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - start).count() << std::endl;
+  std::cout << "Set up time: " << std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - start).count() << std::endl;
 
   window.resetGLStates(); // call it if you only draw ImGui. Otherwise not needed.
   sf::Clock deltaClock;
@@ -39,14 +42,15 @@ int main(int argc, char** argv) {
       if (event.type == sf::Event::Closed) {
         window.close();
       }
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+        window.close();
+      }
     }
 
     ImGui::SFML::Update(window, deltaClock.restart());
-//    ImGui::Image(texture, sf::Vector2f(window.getSize()));
-//    ImGui::Image(texture, sf::Vector2f(480, 270));
+
     window.draw(img);
 
-//    window.clear(sf::Color(0, 0, 0)); // fill background with color
     ImGui::SFML::Render(window);
     window.display();
   }
