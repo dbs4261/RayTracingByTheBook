@@ -4,11 +4,13 @@
 #include <array>
 #include <vector>
 
+#include "raytracer/utilities/utility_types.h"
 #include "raytracer/utilities/vector_types.h"
 
 namespace raytracer {
 
 struct RGBA {
+  static constexpr ChannelType type = ChannelType::RGBA;
   static constexpr size_t channels = 4;
 
   unsigned char r;
@@ -19,6 +21,9 @@ struct RGBA {
 
 class Image {
  public:
+  static constexpr ChannelType type = RGBA::type;
+  static constexpr size_t channels = RGBA::channels;
+
   Image() noexcept;
   Image(size_t x, size_t y) noexcept;
   Image(const Image& other) noexcept;

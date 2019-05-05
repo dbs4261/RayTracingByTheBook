@@ -48,6 +48,8 @@ template <typename T>
 struct Coordinate<T, 1> : public Coordinate_<T, 1> {
   static constexpr size_t N = 1;
   T x;
+
+  constexpr explicit Coordinate(T x) : x(x) {}
 };
 
 template <typename T>
@@ -55,6 +57,8 @@ struct Coordinate<T, 2> : public Coordinate_<T, 2> {
   static constexpr size_t N = 2;
   T x;
   T y;
+
+  constexpr Coordinate(T x, T y) : x(x), y(y) {}
 };
 
 template <typename T>
@@ -63,6 +67,8 @@ struct Coordinate<T, 3> : public Coordinate_<T, 3> {
   T x;
   T y;
   T z;
+
+  constexpr Coordinate(T x, T y, T z) : x(x), y(y), z(z) {}
 };
 
 template <typename T>
@@ -72,6 +78,8 @@ struct Coordinate<T, 4> : public Coordinate_<T, 4> {
   T y;
   T z;
   T w;
+
+  constexpr Coordinate(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
 };
 
 }

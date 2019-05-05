@@ -5,7 +5,7 @@ namespace raytracer {
 Image::Image() noexcept : Image(1, 1) {}
 
 Image::Image(size_t x, size_t y) noexcept :
-    size({.x=x, .y=y}), data(x * y * RGBA::channels),
+    size(x, y), data(x * y * RGBA::channels),
     color_data(*reinterpret_cast<std::vector<RGBA>*>(&this->data)) {
 }
 
