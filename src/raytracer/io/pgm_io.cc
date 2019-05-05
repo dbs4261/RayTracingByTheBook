@@ -1,24 +1,7 @@
-#ifndef CORONAXL_IMAGE_IO_H
-#define CORONAXL_IMAGE_IO_H
-
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <iterator>
-#include <vector>
-
-#include "raytracer/image/image.h"
+#include "pgm_io.h"
 
 namespace raytracer {
 
-/**
- * @brief Reads an image from a grayscale PGM
- * @param fname The file to read.
- * @param size The size of the image.
- * @param data The image data.
- * @return If the read was successful.
- * @warning THIS DOES NOT DEAL WITH COMMENTS. THEY WILL FUCK EVERYTHING UP ROYALLY.
- */
 bool ReadPGM(const std::string& fname, Image& img) {
   std::ifstream infile(fname);
   if (not infile.is_open()) {
@@ -61,9 +44,9 @@ bool ReadPGM(const std::string& fname, Image& img) {
     return false;
   }
   return true;
-};
+}
 
-bool WritePGM(const std::string& fname, Image& img, bool rescale = false) {
+bool WritePGM(const std::string& fname, Image& img, bool rescale) {
   std::ofstream outfile(fname);
   if (not outfile.is_open()) {
     outfile.open(fname);
@@ -79,16 +62,14 @@ bool WritePGM(const std::string& fname, Image& img, bool rescale = false) {
     }
     for (size_t y = 0; y < img.GetY(); y++) {
       std::copy(img.data.data() + (y * img.GetX()),
-          img.data.data() + ((y + 1) * img.GetX()),
-          std::ostream_iterator<unsigned int>(outfile, " "));
+                img.data.data() + ((y + 1) * img.GetX()),
+                std::ostream_iterator<unsigned int>(outfile, " "));
       outfile << '\n';
     }
     return not outfile.fail();
   } else {
     return false;
   }
-};
-
 }
 
-#endif //CORONAXL_IMAGE_IO_H
+}

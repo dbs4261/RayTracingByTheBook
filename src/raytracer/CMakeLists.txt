@@ -4,6 +4,7 @@ target_sources(raytracer
   PRIVATE
     gui/drawable_image.cc
     image/image.cc
+    io/pgm_io.cc
 )
 
 target_compile_options(raytracer
