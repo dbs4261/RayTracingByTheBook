@@ -27,7 +27,9 @@ class Image {
   Image& operator=(const Image& other) noexcept;
   Image& operator=(Image&& other) noexcept;
 
-  const Coordinate<size_t, 2>& GetSize() const;
+  inline const Coordinate<size_t, 2>& GetSize() const {
+    return this->size;
+  }
 
   void SetSize(const Coordinate<size_t, 2>& new_size);
 

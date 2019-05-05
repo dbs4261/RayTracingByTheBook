@@ -34,10 +34,6 @@ Image& Image::operator=(Image&& other) noexcept {
   return *this;
 }
 
-const Coordinate<size_t, 2>& Image::GetSize() const {
-  return this->size;
-}
-
 void Image::SetSize(const Coordinate<size_t, 2>& new_size)  {
   this->size = new_size;
   this->data.resize(new_size.x * new_size.y * RGBA::channels);
