@@ -7,9 +7,9 @@
 #include <iterator>
 #include <vector>
 
-#include "coordinate.h"
+#include "raytracer/image/image.h"
 
-namespace corona {
+namespace raytracer {
 
 /**
  * @brief Reads an image from a grayscale PGM
@@ -19,7 +19,7 @@ namespace corona {
  * @return If the read was successful.
  * @warning THIS DOES NOT DEAL WITH COMMENTS. THEY WILL FUCK EVERYTHING UP ROYALLY.
  */
-bool ReadPGM(const std::string& fname, corona::NdSize<2>& size, std::vector<unsigned char>& data) {
+bool ReadPGM(const std::string& fname, Image& img) {
   std::ifstream infile(fname);
   if (not infile.is_open()) {
     infile.open(fname);
@@ -29,19 +29,19 @@ bool ReadPGM(const std::string& fname, corona::NdSize<2>& size, std::vector<unsi
     std::string magic;
     infile >> magic;
     if (magic == "P2") {
-      size_t max;
-      infile >> size.x >> size.y >> max;
-      if (max <= std::numeric_limits<char>::max()) {
+      size_t size_x, size_y, max;
+      infile >> size_x >> size_y >> max;
+      img.SetSize(size_x, size_y);
+      if (max <= std::numeric_limits<unsigned char>::max()) {
         std::cerr << "Maximum value in the PGM, " << max << " is greater than the container can hold" << std::endl;
         return false;
       }
-      size_t max_index = size.x * size.y;
-      data.resize(max_index);
+      size_t max_index = size_x * size_y;
       int temp_val;
       size_t index = 0;
       while (index < max_index) {
         infile >> temp_val;
-        data.at(index) = static_cast<unsigned char>(temp_val);
+        img.data.at(index) = static_cast<unsigned char>(temp_val);
         if (infile.eof()) {
           std::cerr << "Was unable to read all the data from the file" << std::endl;
           return false;
@@ -63,7 +63,7 @@ bool ReadPGM(const std::string& fname, corona::NdSize<2>& size, std::vector<unsi
   return true;
 };
 
-bool WritePGM(const std::string& fname, const corona::NdSize<2>& size, const unsigned int* data, bool rescale = false) {
+bool WritePGM(const std::string& fname, Image& img, bool rescale = false) {
   std::ofstream outfile(fname);
   if (not outfile.is_open()) {
     outfile.open(fname);
@@ -71,14 +71,16 @@ bool WritePGM(const std::string& fname, const corona::NdSize<2>& size, const uns
 
   if (outfile.is_open()) {
     outfile << "P2 ";
-    outfile << size.x << " " << size.y << '\n';
+    outfile << img.GetX() << " " << img.GetY() << '\n';
     if (rescale) {
-      outfile << (unsigned int)*std::max_element(data, data + (size.x * size.y)) << '\n';
+      outfile << (unsigned int) * std::max_element(img.data.begin(), img.data.end()) << '\n';
     } else {
       outfile << "255\n";
     }
-    for (size_t y = 0; y < size.y; y++) {
-      std::copy(data + (y * size.x), data + ((y + 1) * size.x), std::ostream_iterator<unsigned int>(outfile, " "));
+    for (size_t y = 0; y < img.GetY(); y++) {
+      std::copy(img.data.data() + (y * img.GetX()),
+          img.data.data() + ((y + 1) * img.GetX()),
+          std::ostream_iterator<unsigned int>(outfile, " "));
       outfile << '\n';
     }
     return not outfile.fail();

@@ -45,6 +45,7 @@ class Image {
   }
 
   void SetSize(const Coordinate<size_t, 2>& new_size);
+  void SetSize(size_t x, size_t y);
 
   std::vector<unsigned char> data;
   std::vector<RGBA>& color_data;

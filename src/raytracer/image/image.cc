@@ -40,4 +40,11 @@ void Image::SetSize(const Coordinate<size_t, 2>& new_size)  {
   this->color_data = *reinterpret_cast<std::vector<RGBA>*>(&this->data);
 }
 
+void Image::SetSize(size_t x, size_t y) {
+  this->size.x = x;
+  this->size.y = y;
+  this->data.resize(x * y * RGBA::channels);
+  this->color_data = *reinterpret_cast<std::vector<RGBA>*>(&this->data);
+}
+
 }
